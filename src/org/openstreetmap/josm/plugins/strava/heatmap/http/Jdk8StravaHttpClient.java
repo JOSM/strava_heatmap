@@ -7,18 +7,61 @@ import java.io.IOException;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link StravaHttpClient} compatible with JDK 8.
+ * This implementation has to override the default cookie handler that is set statically in {@link HttpClient},
+ * since its default cookie policy would otherwise reject the Strava sub-domain cookies.
+ * See {@link Jdk11StravaHttpClient} for a simpler implementation of the {@link StravaHttpClient} interface.
  */
 public class Jdk8StravaHttpClient implements StravaHttpClient {
 
-    private static CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
+    /**
+     * Replace the default cookie policy by a new one that accepts cookies from one Strava sub-domain to another.
+     * All other cookies are processed according to the original cookie policy set in {@link HttpClient}.
+     */
+    public static final CookiePolicy ACCEPT_STRAVA_SUBDOMAINS = new CookiePolicy() {
+        public boolean shouldAccept(URI uri, HttpCookie cookie) {
+            boolean shouldAccept = false;
+            String host = uri.getHost();
+            String cookieDomain = cookie.getDomain();
+            if (host != null
+                    && cookieDomain != null
+                    && host.equals("www.strava.com")
+                    && cookieDomain.equals("strava.com")) {
+                shouldAccept = true;
+            } else {
+                shouldAccept = CookiePolicy.ACCEPT_ORIGINAL_SERVER.shouldAccept(uri, cookie);
+            }
+            if (Logging.isLoggingEnabled(Level.INFO)) {
+                Logging.info("Cookie " + cookie.getName() + (shouldAccept ? " accepted." : " rejected."));
+            }
+            return shouldAccept;
+        }
+    };
+
+    private static CookieManager STRAVA_COOKIE_MANAGER;
+
+    static {
+
+        try {
+            // force the initialization of the static block in HttpClient where the default cookie handler is set.
+            HttpClient.create(null);
+            // retrieve the default cookie handler
+            CookieManager oldCookieHandler = (CookieManager) CookieHandler.getDefault();
+            // replace the old handler by the new one, and reuse the cookie store
+            STRAVA_COOKIE_MANAGER = new CookieManager(oldCookieHandler.getCookieStore(), ACCEPT_STRAVA_SUBDOMAINS);
+            CookieHandler.setDefault(STRAVA_COOKIE_MANAGER);
+        } catch (Exception e) {
+            Logging.log(Logging.LEVEL_ERROR, "Unable to override default cookie handler", e);
+        }
+    }
+
 
     public Jdk8StravaHttpClient() {
         Logging.info("Using JDK8-compatible HTTP client to connect to Strava website");
-        CookieHandler.setDefault(cookieManager);
     }
 
     @Override
@@ -42,7 +85,7 @@ public class Jdk8StravaHttpClient implements StravaHttpClient {
             HttpClient.Response response = httpClient.connect();
 
             URI uri = URI.create(stravaHttpRequest.getUri());
-            Map<String, String> cookies = cookieManager.getCookieStore().get(uri)
+            Map<String, String> cookies = STRAVA_COOKIE_MANAGER.getCookieStore().get(uri)
                     .stream().collect(Collectors.toMap(HttpCookie::getName, HttpCookie::getValue));
 
             String locationHeader = response.getHeaderField("Location");
@@ -65,7 +108,7 @@ public class Jdk8StravaHttpClient implements StravaHttpClient {
 
     @Override
     public void removeAllCookiesFromCookieStore() {
-        cookieManager.getCookieStore().removeAll();
+        STRAVA_COOKIE_MANAGER.getCookieStore().removeAll();
     }
 
 
