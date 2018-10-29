@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="strava_heatmap" default="dist" basedir=".">
+
+    <!-- enter the SVN commit message -->
+    <property name="commit.message" value="Commit message"/>
+    <!-- enter the *lowest* JOSM version this plugin is currently compatible with -->
+    <property name="plugin.main.version" value="14382"/>
+    <property name="plugin.author" value="allier-osm"/>
+    <property name="plugin.class" value="org.openstreetmap.josm.plugins.strava.heatmap.StravaHeatmapPlugin"/>
+    <property name="plugin.description" value="This plugin provides access to the High-resolution Strava heatmaps (zoom level > 12) that require to be authenticated with a Strava account. The plugin stores Strava account details (email and password) and transparently manages the authentication process."/>
+    <property name="plugin.icon" value="images/strava_heatmap.png"/>
+    <property name="plugin.link" value="..."/>
+
+    <property name="plugin.canloadatruntime" value="true"/>
+    <property name="plugin.minimum.java.version" value="8"/>
+
+    <!-- ** include targets that all plugins have in common ** -->
+    <import file="../build-common.xml"/>
+  
+</project>
