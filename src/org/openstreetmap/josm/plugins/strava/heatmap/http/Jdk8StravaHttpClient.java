@@ -22,25 +22,7 @@ public class Jdk8StravaHttpClient implements StravaHttpClient {
      * Replace the default cookie policy by a new one that accepts cookies from one Strava sub-domain to another.
      * All other cookies are processed according to the original cookie policy set in {@link HttpClient}.
      */
-    public static final CookiePolicy ACCEPT_STRAVA_SUBDOMAINS = new CookiePolicy() {
-        public boolean shouldAccept(URI uri, HttpCookie cookie) {
-            boolean shouldAccept = false;
-            String host = uri.getHost();
-            String cookieDomain = cookie.getDomain();
-            if (host != null
-                    && cookieDomain != null
-                    && host.equals("www.strava.com")
-                    && cookieDomain.equals("strava.com")) {
-                shouldAccept = true;
-            } else {
-                shouldAccept = CookiePolicy.ACCEPT_ORIGINAL_SERVER.shouldAccept(uri, cookie);
-            }
-            if (Logging.isLoggingEnabled(Level.INFO)) {
-                Logging.info("Cookie " + cookie.getName() + (shouldAccept ? " accepted." : " rejected."));
-            }
-            return shouldAccept;
-        }
-    };
+    public static final CookiePolicy ACCEPT_STRAVA_SUBDOMAINS = new AllStravaSubDomainsCookiePolicy();
 
     private static CookieManager STRAVA_COOKIE_MANAGER;
 

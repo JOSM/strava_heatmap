@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class Jdk11StravaHttpClient implements StravaHttpClient {
 
-    private CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
+    private CookieManager cookieManager = new CookieManager(null, new AllStravaSubDomainsCookiePolicy());
 
     private HttpClient httpClient = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
