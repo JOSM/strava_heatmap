@@ -75,11 +75,14 @@ public class StravaHeatmapLayerProcessor {
         try {
             String cookies = cookiesRetriever.getCookiesAsRequestParameters();
             // switch to authenticated tile server and append cookies as request parameters
+            // if the layer has been added before, then the URL is already updated --> do nothing.
             String oldUrl = imageryInfo.getUrl();
-            String newUrl = oldUrl.replace("/tiles/", "/tiles-auth/").concat(cookies);
-            imageryInfo.setUrl(newUrl);
+            if(!oldUrl.contains("/tiles-auth/")) {
+                String newUrl = oldUrl.replace("/tiles/", "/tiles-auth/").concat(cookies);
+                imageryInfo.setUrl(newUrl);
+                imageryInfo.setDefaultMaxZoom(15);
+            }
 
-            imageryInfo.setDefaultMaxZoom(15);
         } catch (StravaAuthenticationException e) {
             Logging.error(e);
             GuiHelper.runInEDT(() ->

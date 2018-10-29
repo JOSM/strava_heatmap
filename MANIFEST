@@ -2,14 +2,14 @@ Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.9.4
 Created-By: 11.0.1+13 (Oracle Corporation)
 Plugin-Mainversion: 14382
-Plugin-Version: UNKNOWN
+Plugin-Version: 1540820117
 Plugin-Class: org.openstreetmap.josm.plugins.strava.heatmap.StravaHeat
  mapPlugin
 Plugin-Description: This plugin provides access to the High-resolution
-  Strava heatmaps (zoom level >13) that require to be authenticated wi
- th a Strava account. The plugin stores Strava account details (email 
- and password) and transparently manages the authentication process.
-Plugin-Date: 2018-10-29T13:13:26.744
+  Strava heatmaps (zoom level > 12) that require to be authenticated w
+ ith a Strava account. The plugin stores Strava account details (email
+  and password) and transparently manages the authentication process.
+Plugin-Date: 2018-10-29 14:35:17 +0100
 Author: allier-osm
 Plugin-Icon: images/strava_heatmap.png
 Plugin-Canloadatruntime: true
