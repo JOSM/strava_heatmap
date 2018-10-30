@@ -13,7 +13,7 @@ public interface StravaHttpClient {
     StravaHttpResponse sendRequest(StravaHttpRequest stravaHttpRequest) throws StravaHttpException;
 
     /**
-     * Clear the cookies store.
+     * Clears the cookies store.
      * Useful for testing.
      */
     void removeAllCookiesFromCookieStore();

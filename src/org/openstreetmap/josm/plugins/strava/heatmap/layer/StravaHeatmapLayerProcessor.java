@@ -5,8 +5,8 @@ import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.gui.layer.TMSLayer;
 import org.openstreetmap.josm.gui.util.GuiHelper;
-import org.openstreetmap.josm.plugins.strava.heatmap.authentication.StravaCookiesRetriever;
 import org.openstreetmap.josm.plugins.strava.heatmap.authentication.StravaAuthenticationException;
+import org.openstreetmap.josm.plugins.strava.heatmap.authentication.StravaCookiesRetriever;
 import org.openstreetmap.josm.plugins.strava.heatmap.http.StravaHttpException;
 import org.openstreetmap.josm.tools.I18n;
 import org.openstreetmap.josm.tools.Logging;
@@ -24,11 +24,11 @@ public class StravaHeatmapLayerProcessor {
     /**
      * The list of default Strava layers published in the JOSM imagery preferences.
      */
-    private static final List<String> STRAVA_LAYER_IDS = Arrays.asList(new String[]{"strava_cycling_heatmap", "strava_running_heatmap", "strava_both_heatmap", "strava_water_heatmap", "strava_winter_heatmap"});
+    private static final List<String> STRAVA_LAYER_IDS = Arrays.asList("strava_cycling_heatmap", "strava_running_heatmap", "strava_both_heatmap", "strava_water_heatmap", "strava_winter_heatmap");
 
 
     /**
-     * If the layer is a Strava layer, then adds the authentication cookies.
+     * Adds the Strava authentication cookies if and only if the layer is a Strava layer.
      *
      * @param layer the layer being opened.
      */
@@ -63,8 +63,8 @@ public class StravaHeatmapLayerProcessor {
     }
 
     /**
-     * Update the URL and add the authentication cookies to the default imagery information.
-     * TODO use {@link StravaCookiesRetriever#getCookiesAsHttpHeader()} when upgrading to JOSM > 14382
+     * Updates the URL and adds the authentication cookies to the default imagery information.
+     * TODO use {@link StravaCookiesRetriever#getCookiesAsHttpHeader()} when using JOSM revision 34702 or higher.
      *
      * @param imageryInfo the layer's imagery info.
      */
@@ -77,7 +77,7 @@ public class StravaHeatmapLayerProcessor {
             // switch to authenticated tile server and append cookies as request parameters
             // if the layer has been added before, then the URL is already updated --> do nothing.
             String oldUrl = imageryInfo.getUrl();
-            if(!oldUrl.contains("/tiles-auth/")) {
+            if (!oldUrl.contains("/tiles-auth/")) {
                 String newUrl = oldUrl.replace("/tiles/", "/tiles-auth/").concat(cookies);
                 imageryInfo.setUrl(newUrl);
                 imageryInfo.setDefaultMaxZoom(15);

@@ -11,7 +11,7 @@ import org.openstreetmap.josm.plugins.strava.heatmap.layer.StravaHeatmapLayerPro
 import org.openstreetmap.josm.plugins.strava.heatmap.preference.StravaHeatmapPreferenceSetting;
 
 /**
- * Plugin providing access to the high-resolution Strave heatmap.
+ * Plugin providing access to the high-resolution Strava heatmap.
  * The high-resolution heatmap requires to be authenticated with a valid Strava account.
  * When a layer is opened, the plugin checks whether it is a default Strava layer and add the required credentials.
  *
@@ -30,11 +30,9 @@ public class StravaHeatmapPlugin extends Plugin implements LayerManager.LayerCha
         MainApplication.getLayerManager().addLayerChangeListener(this);
     }
 
-
     @Override
     public PreferenceSetting getPreferenceSetting() {
-        PreferenceSetting preferenceSetting = new StravaHeatmapPreferenceSetting();
-        return preferenceSetting;
+        return new StravaHeatmapPreferenceSetting();
     }
 
     @Override

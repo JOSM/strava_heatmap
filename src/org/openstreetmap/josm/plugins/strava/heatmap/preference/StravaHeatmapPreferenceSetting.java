@@ -24,10 +24,10 @@ public class StravaHeatmapPreferenceSetting extends DefaultTabPreferenceSetting 
 
     public StravaHeatmapPreferenceSetting() {
         super("strava_heatmap.png", I18n.tr("Strava Heatmap"),
-                I18n.tr("This plugin provides access to the High-resolution Strava heatmaps (zoom level >12)"
+                I18n.tr("This plugin provides access to the high-resolution Strava heatmaps (zoom level >12)"
                         +" that require to be authenticated with a Strava account.<br/>"
                         +" The plugin stores Strava account details (email and password) and transparently manages the authentication process.<br/><br/>"
-                        +" Set your Strava account details in the fields below and open the default Strava heatmap layers defined in the menu Imagery > Imagery Preference")
+                        +" Set your Strava account details in the fields below and open the default Strava heatmap layers defined in the menu Imagery > Imagery preferences.")
         );
     }
 

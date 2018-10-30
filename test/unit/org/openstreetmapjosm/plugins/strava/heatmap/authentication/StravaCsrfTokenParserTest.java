@@ -2,9 +2,8 @@ package org.openstreetmapjosm.plugins.strava.heatmap.authentication;
 
 import org.junit.Test;
 import org.openstreetmap.josm.plugins.strava.heatmap.authentication.StravaCsrfTokenParser;
-import org.openstreetmap.josm.plugins.strava.heatmap.http.StravaHttpClient;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class StravaCsrfTokenParserTest {
 

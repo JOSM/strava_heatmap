@@ -15,7 +15,7 @@ public class StravaCookiesRetrieverTest {
 
     /**
      * The email credential is externalized as a Java System property.
-     * @return
+     * @return the test Strava account email.
      */
     private static String getEmail() {
         return System.getProperty("strava.heatmap.test.email");
@@ -23,7 +23,7 @@ public class StravaCookiesRetrieverTest {
 
     /**
      * The password credential is externalized as a Java System property.
-     * @return
+     * @return the test Strava account password.
      */
     private static String getPassword() {
         return System.getProperty("strava.heatmap.test.password");

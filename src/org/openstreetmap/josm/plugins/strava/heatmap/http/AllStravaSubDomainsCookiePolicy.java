@@ -5,17 +5,17 @@ import org.openstreetmap.josm.tools.Logging;
 import java.net.CookiePolicy;
 import java.net.HttpCookie;
 import java.net.URI;
-import java.util.logging.Level;
 
 
 /**
- * A cookie policy that accepts cookies from Strava domain to another.
+ * A cookie policy that accepts cookies from one Strava domain to another.
  * For all other domains it falls back to {@link CookiePolicy#ACCEPT_ORIGINAL_SERVER}.
  */
 public class AllStravaSubDomainsCookiePolicy implements CookiePolicy {
 
+    @Override
     public boolean shouldAccept(URI uri, HttpCookie cookie) {
-        boolean shouldAccept = false;
+        boolean shouldAccept;
         String host = uri.getHost();
         String cookieDomain = cookie.getDomain();
         if (host != null
@@ -26,8 +26,8 @@ public class AllStravaSubDomainsCookiePolicy implements CookiePolicy {
         } else {
             shouldAccept = CookiePolicy.ACCEPT_ORIGINAL_SERVER.shouldAccept(uri, cookie);
         }
-        if (Logging.isLoggingEnabled(Level.INFO)) {
-            Logging.info("Cookie " + cookie.getName() + (shouldAccept ? " accepted." : " rejected."));
+        if (Logging.isDebugEnabled()) {
+            Logging.debug("Cookie " + cookie.getName() + (shouldAccept ? " accepted." : " rejected."));
         }
         return shouldAccept;
     }

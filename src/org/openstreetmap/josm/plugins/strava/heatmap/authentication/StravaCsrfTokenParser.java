@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 
 /**
- * Utility class for extracting thr CSRF token from the login page.
+ * Utility class for extracting the CSRF token from the login page.
  */
 public class StravaCsrfTokenParser {
 
@@ -22,9 +22,9 @@ public class StravaCsrfTokenParser {
 
 
     /**
-     * Extract the CSRF token from the provided HTML content string.
+     * Extracts the CSRF token from the provided HTML content string.
      *
-     * @return the CSRF token or an empty string if the token is not found..
+     * @return the CSRF token or an empty string if the token is not found.
      */
     public String findCsrfToken() {
 
@@ -41,7 +41,7 @@ public class StravaCsrfTokenParser {
                         matcher.group(),
                         matcher.start(),
                         matcher.end());
-                Logging.debug("Found CSRF token : " + token);
+                Logging.debug("Found CSRF token: " + token);
 
             }
             return token;

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -19,10 +18,10 @@ import java.util.stream.Collectors;
 public class Jdk8StravaHttpClient implements StravaHttpClient {
 
     /**
-     * Replace the default cookie policy by a new one that accepts cookies from one Strava sub-domain to another.
+     * Replaces the default cookie policy by a new one that accepts cookies from one Strava sub-domain to another.
      * All other cookies are processed according to the original cookie policy set in {@link HttpClient}.
      */
-    public static final CookiePolicy ACCEPT_STRAVA_SUBDOMAINS = new AllStravaSubDomainsCookiePolicy();
+    private static final CookiePolicy ACCEPT_STRAVA_SUBDOMAINS = new AllStravaSubDomainsCookiePolicy();
 
     private static CookieManager STRAVA_COOKIE_MANAGER;
 
@@ -76,7 +75,7 @@ public class Jdk8StravaHttpClient implements StravaHttpClient {
             StravaHttpResponse stravaHttpResponse = new StravaHttpResponse(statusCode, body, cookies, locationHeader);
 
             if (Logging.isDebugEnabled()) {
-                Logging.debug("HTTP status code from URI " + uri + ":\n" + statusCode);
+                Logging.debug("HTTP status code from URI " + uri + ":" + statusCode);
             }
             if (Logging.isTraceEnabled()) {
                 Logging.trace("HTML content from URI " + uri + ":\n" + body);

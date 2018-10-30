@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Retrieves the HTTP session cookies required for accessing the high-resolution Strava heatmap.
+ * Retrieves the HTTP session cookies required for accessing the high-resolution Strava heatmaps.
  * The plugin emulates the submission of the Strava website login form.
  * This is a 3-step process:
- * 1. Retrieving the csrf token from the login form.
- * 2. Posting the form with the csrf token together with the user email and password.
+ * 1. Retrieving the CSRF token from the login form.
+ * 2. Posting the form with the CSRF token together with the user email and password.
  * 3. After successful authentication, retrieving and storing the HTTP session cookies.
  * The cookies are stored in the JOSM preferences and reused as long as they are valid.
  * When the stored cookies become obsolete the authentication process is triggered again
@@ -41,7 +41,7 @@ public class StravaCookiesRetriever {
      * If the cookies stored in the JOSM preferences are still valid, they are reused.
      * Otherwise the authentication process is triggered again and new cookies are retrieved from the Strava website.
      *
-     * @return the cookies formated as an HTTP "Cookie" header.
+     * @return the cookies formatted as an HTTP "Cookie" header.
      */
     public String getCookiesAsHttpHeader() throws StravaHttpException, StravaAuthenticationException {
         String cookies = Config.getPref().get("strava.heatmap.cookies");
@@ -57,7 +57,7 @@ public class StravaCookiesRetriever {
 
     /**
      * Returns the heatmap authentication cookies, formatted as URL request parameters.
-     * The parameters are URL-encoded
+     * The parameters are URL-encoded.
      *
      * @return the cookies formatted as URL request parameters.
      */
@@ -68,9 +68,9 @@ public class StravaCookiesRetriever {
     }
 
     /**
-     * Test if the cookies are still valid.
+     * Tests if the cookies are still valid.
      * The test consists in attempting to download an arbitrary  tile on the tile server.
-     * If the tile server returns an HTTP status code 403 then the cookies are expired.
+     * If the tile server returns a HTTP status code 403 then the cookies are expired.
      *
      * @param cookies the cookies to be tested for validity.
      * @return true if the cookies are still valid.
@@ -99,7 +99,7 @@ public class StravaCookiesRetriever {
 
 
     /**
-     * Logon the Strava website by submitting the HTML login form.
+     * Logs on the Strava website by submitting the HTML login form.
      * Upon successful authentication the web server should redirect to either the "Dashboard" or the "Onboarding" pages.
      */
     private void logonStrava() throws StravaHttpException, StravaAuthenticationException {
@@ -135,11 +135,10 @@ public class StravaCookiesRetriever {
     }
 
     /**
-     * Retrieve the CSRF token from the HTML login form.
+     * Retrieves the CSRF token from the HTML login form.
      * A valid CSRF token is required for submitting the form.
      *
      * @return the CSRF token.
-     * @throws StravaHttpException
      */
     private String retrieveCsrfToken() throws StravaHttpException {
         StravaHttpRequest request = new StravaHttpRequest();
@@ -155,11 +154,10 @@ public class StravaCookiesRetriever {
     }
 
     /**
-     * Retrieve the heatmap authentication cookies.
+     * Retrieves the heatmap authentication cookies.
      * This must be performed after a successful login with {@link #logonStrava()}.
      *
      * @return the heatmap authentication cookies.
-     * @throws StravaHttpException
      */
     private String retrieveHeatmapCookies() throws StravaHttpException {
 
@@ -169,12 +167,10 @@ public class StravaCookiesRetriever {
 
         Map<String, String> cookies = response.getCookies();
 
-        String cloudFrontCookies = cookies.entrySet().stream()
+        return cookies.entrySet().stream()
                 .filter(cookie -> cookie.getKey().startsWith("CloudFront"))
                 .map(c -> c.getKey() + "=" + c.getValue())
                 .collect(Collectors.joining(";"));
-
-        return cloudFrontCookies;
     }
 
     /**
@@ -182,7 +178,7 @@ public class StravaCookiesRetriever {
      *
      * @param email     Strava account email.
      * @param password  Strava account password.
-     * @param csrfToken CSRF token
+     * @param csrfToken CSRF token.
      * @return an URL-encoded list of form parameters.
      */
     private String buildRequestParametersString(String email, String password, String csrfToken) {
@@ -199,7 +195,7 @@ public class StravaCookiesRetriever {
     }
 
     /**
-     * URL-encode a parameter.
+     * URL-encodes a parameter.
      * The charset is UTF-8.
      * TODO use {@link URLEncoder#encode(String, Charset)} when upgrading to JDK 11
      *
@@ -215,8 +211,8 @@ public class StravaCookiesRetriever {
     }
 
     /**
-     * Remove all cookies from the cookie manager.
-     * Useful for unit test.
+     * Removes all cookies from the cookie manager.
+     * Useful for unit testing.
      */
     public void removeAllCookiesFromCookieStore() {
         stravaHttpClient.removeAllCookiesFromCookieStore();

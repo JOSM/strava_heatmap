@@ -4,7 +4,6 @@ import org.openstreetmap.josm.tools.Logging;
 
 import java.io.IOException;
 import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -62,8 +61,7 @@ public class Jdk11StravaHttpClient implements StravaHttpClient {
             StravaHttpResponse stravaHttpResponse = new StravaHttpResponse(statusCode, body, cookies, locationHeader);
 
             if (Logging.isDebugEnabled()) {
-                Logging.debug("HTT" +
-                        "P status code from URI " + uri + ":\n" + statusCode);
+                Logging.debug("HTTP status code from URI " + uri + ":" + statusCode);
             }
             if (Logging.isTraceEnabled()) {
                 Logging.trace("HTML content from URI " + uri + ":\n" + body);
