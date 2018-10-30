@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<project name="strava_heatmap" default="dist" basedir=".">
+<project name="strava_heatmap" default="dist" basedir="." xmlns:unless="ant:unless">
 
     <!-- enter the SVN commit message -->
     <property name="commit.message" value="Commit message"/>
@@ -17,5 +17,22 @@
 
     <!-- ** include targets that all plugins have in common ** -->
     <import file="../build-common.xml"/>
+
+    <!-- Override compile target in order to exclude JDK11-dependent classes on pre-JDK11 build -->
+    <target name="compile" depends="init, pre-compile" unless="skip-compile">
+        <javac srcdir="${plugin.src.dir}" debug="true" destdir="${plugin.build.dir}" includeantruntime="false"
+               encoding="UTF-8" target="${java.lang.version}" source="${java.lang.version}" fork="yes">
+            <exclude unless:set="isJava11" name="org/openstreetmap/josm/plugins/strava/heatmap/http/Jdk11StravaHttpClient.java"/>
+            <compilerarg value="-J-Xbootclasspath/p:${error_prone_javac.jar}" unless:set="isJava9"/>
+            <compilerarg line="-XDcompilePolicy=simple"/>
+            <compilerarg value="-processorpath"/>
+            <compilerarg pathref="processor.path"/>
+            <compilerarg value="-Xlint:deprecation"/>
+            <compilerarg value="-Xlint:unchecked"/>
+            <compilerarg value="-Xplugin:ErrorProne -Xep:StringSplitter:OFF -Xep:ReferenceEquality:OFF -Xep:InsecureCryptoUsage:OFF -Xep:FutureReturnValueIgnored:OFF -Xep:JdkObsolete:OFF"/>
+            <compilerarg line="-Xmaxwarns 1000"/>
+            <classpath refid="plugin.classpath"/>
+        </javac>
+    </target>
   
 </project>
