@@ -64,7 +64,6 @@ public class StravaHeatmapLayerProcessor {
 
     /**
      * Updates the URL and adds the authentication cookies to the default imagery information.
-     * TODO use {@link StravaCookiesRetriever#getCookiesAsHttpHeader()} when using JOSM revision 34702 or higher.
      *
      * @param imageryInfo the layer's imagery info.
      */
@@ -73,15 +72,19 @@ public class StravaHeatmapLayerProcessor {
         // get cookies as request parameters (ImageryInfo does not expose a method to set cookies as HTTP header)
         StravaCookiesRetriever cookiesRetriever = new StravaCookiesRetriever();
         try {
-            String cookies = cookiesRetriever.getCookiesAsRequestParameters();
-            // switch to authenticated tile server and append cookies as request parameters
+            String cookies = cookiesRetriever.getCookiesAsHttpHeader();
+            // set the authentication cookies as a HTTP cookie header
+            imageryInfo.setCookies(cookies);
+            // switch to authenticated tile server
             // if the layer has been added before, then the URL is already updated --> do nothing.
             String oldUrl = imageryInfo.getUrl();
             if (!oldUrl.contains("/tiles-auth/")) {
-                String newUrl = oldUrl.replace("/tiles/", "/tiles-auth/").concat(cookies);
+                String newUrl = oldUrl.replace("/tiles/", "/tiles-auth/");
                 imageryInfo.setUrl(newUrl);
-                imageryInfo.setDefaultMaxZoom(15);
             }
+            //increase the default max zoom
+            imageryInfo.setDefaultMaxZoom(15);
+
 
         } catch (StravaAuthenticationException e) {
             Logging.error(e);

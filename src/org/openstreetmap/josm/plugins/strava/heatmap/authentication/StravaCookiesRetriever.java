@@ -56,18 +56,6 @@ public class StravaCookiesRetriever {
     }
 
     /**
-     * Returns the heatmap authentication cookies, formatted as URL request parameters.
-     * The parameters are URL-encoded.
-     *
-     * @return the cookies formatted as URL request parameters.
-     */
-    public String getCookiesAsRequestParameters() throws StravaHttpException, StravaAuthenticationException {
-        String cookies = getCookiesAsHttpHeader();
-        cookies = cookies.replace(";CloudFront-", "&").replace("CloudFront-", "?");
-        return cookies;
-    }
-
-    /**
      * Tests if the cookies are still valid.
      * The test consists in attempting to download an arbitrary  tile on the tile server.
      * If the tile server returns a HTTP status code 403 then the cookies are expired.
